@@ -47,16 +47,48 @@ class BasicDataset(Dataset):
         if not self.ids:
             raise RuntimeError(f'No input file found in {images_dir}, make sure you put your images there')
 
-        logging.info(f'Creating dataset with {len(self.ids)} examples')
-        logging.info('Scanning mask files to determine unique values')
-        with Pool() as p:
-            unique = list(tqdm(
-                p.imap(partial(unique_mask_values, mask_dir=self.mask_dir, mask_suffix=self.mask_suffix), self.ids),
-                total=len(self.ids)
-            ))
+        # logging.info(f'Creating dataset with {len(self.ids)} examples')
+        # logging.info('Scanning mask files to determine unique values')
+        # with Pool() as p:
+        #     unique = list(tqdm(
+        #         p.imap(partial(unique_mask_values, mask_dir=self.mask_dir, mask_suffix=self.mask_suffix), self.ids),
+        #         total=len(self.ids)
+        #     ))
 
-        self.mask_values = list(sorted(np.unique(np.concatenate(unique), axis=0).tolist()))
-        logging.info(f'Unique mask values: {self.mask_values}')
+        # self.mask_values = list(sorted(np.unique(np.concatenate(unique), axis=0).tolist()))
+        # logging.info(f'Unique mask values: {self.mask_values}')
+
+        self.mask_values = sorted(
+            [
+                [139, 69, 19],
+                [34, 139, 34],
+                [128, 128, 0],
+                [72, 61, 139],
+                [0, 128, 128],
+                [70, 130, 180],
+                [0, 0, 128],
+                [154, 205, 50],
+                [143, 188, 143],
+                [153, 50, 204],
+                [255, 0, 0],
+                [255, 165, 0],
+                [255, 255, 0],
+                [0, 0, 205],
+                [0, 255, 0],
+                [0, 255, 127],
+                [220, 20, 60],
+                [0, 255, 255],
+                [255, 127, 80],
+                [255, 0, 255],
+                [30, 144, 255],
+                [240, 230, 140],
+                [173, 216, 230],
+                [255, 20, 147],
+                [238, 130, 238],
+                [255, 182, 193],
+                [0, 0, 0],
+            ]
+        )
 
     def __len__(self):
         return len(self.ids)
@@ -114,4 +146,4 @@ class BasicDataset(Dataset):
 
 class CarvanaDataset(BasicDataset):
     def __init__(self, images_dir, mask_dir, scale=1):
-        super().__init__(images_dir, mask_dir, scale, mask_suffix='_mask')
+        super().__init__(images_dir, mask_dir, scale, mask_suffix='')
